@@ -1,52 +1,35 @@
-name: Deploy Hugo site to Pages
+baseURL: "https://SnowRainyl.github.io/"
+title: "SnowRainyl's Blog"
+theme: "PaperMod"
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+paginate: 10
+defaultContentLanguage: zh
+defaultContentLanguageInSubdir: false
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+# 中英双语配置
+languages:
+  zh:
+    languageName: "中文"
+    weight: 1
+    title: "SnowRainyl 的博客"
+    contentDir: content/zh/posts
+  en:
+    languageName: "English"
+    weight: 2
+    title: "SnowRainyl's Blog"
+    contentDir: content/en/posts
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
-defaults:
-  run:
-    shell: bash
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 0
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v2
-        with:
-          hugo-version: 'latest'
-          extended: true
-      - name: Build with Hugo
-        run: hugo --minify
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+params:
+  env: production
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowWordCount: true
+  ShowToc: true
+  
+  profileMode:
+    enabled: true
+    title: "Hi, I'm SnowRainyl 👋"
+    subtitle: "Welcome to my clean and simple blog."
+    imageUrl: "https://github.com/SnowRainyl.png"
+    imageWidth: 120
+    imageHeight: 120
