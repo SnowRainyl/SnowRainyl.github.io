@@ -42,5 +42,5 @@ jobs:
           elif git diff --staged --name-status | grep -q "^D"; then
             git commit -m "auto: sync deletions" && git push
           else
-            git commit -m "auto: translate new posts [skip ci]" && git push
+            git commit -m "auto: translate new posts" && git push
           fi
