@@ -2,9 +2,6 @@ baseURL: "https://SnowRainyl.github.io/"
 title: "SnowRainyl's Blog"
 theme: "PaperMod"
 
-author:
-  name: "SnowRainyl"
-
 paginate: 10
 defaultContentLanguage: zh
 defaultContentLanguageInSubdir: false
@@ -23,6 +20,8 @@ languages:
     contentDir: content/en
 
 params:
+  author:
+    name: "SnowRainyl"
   env: production
   defaultTheme: auto
   ShowReadingTime: true
