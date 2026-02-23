@@ -1,3 +1,37 @@
-baseURL = 'https://snowrainy.org/'
-languageCode = 'en-us'
-title = 'My New Hugo Project'
+# 如果你确定你的专属域名还能用，就把这里换成 "https://snowrainy.org/"
+baseURL: "https://SnowRainyl.github.io/"
+title: "SnowRainyl's Blog"
+theme: "PaperMod"
+
+paginate: 10
+defaultContentLanguage: zh
+defaultContentLanguageInSubdir: false
+
+# 中英双语与文件夹对应配置
+languages:
+  zh:
+    languageName: "中文"
+    weight: 1
+    title: "SnowRainyl 的博客"
+    contentDir: content/zh/posts
+  en:
+    languageName: "English"
+    weight: 2
+    title: "SnowRainyl's Blog"
+    contentDir: content/en/posts
+
+params:
+  env: production
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowWordCount: true
+  ShowToc: true
+  
+  # 首页的个人名片配置
+  profileMode:
+    enabled: true
+    title: "Hi, I'm SnowRainyl 👋"
+    subtitle: "Welcome to my clean and simple blog."
+    imageUrl: "https://github.com/SnowRainyl.png"
+    imageWidth: 120
+    imageHeight: 120
