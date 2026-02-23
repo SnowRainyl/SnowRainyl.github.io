@@ -1,0 +1,30 @@
+backend:
+  name: github
+  repo: SnowRainyl/SnowRainyl.github.io
+  branch: main
+
+media_folder: static/uploads
+public_folder: /uploads
+
+collections:
+  - name: post_zh
+    label: "中文文章"
+    folder: content/zh/posts
+    path: "{{slug}}/index"
+    create: true
+    fields:
+      - { label: "标题", name: title, widget: string }
+      - { label: "发布时间", name: date, widget: datetime }
+      - { label: "标签", name: tags, widget: list, required: false }
+      - { label: "正文", name: body, widget: markdown }
+
+  - name: post_en
+    label: "English Posts"
+    folder: content/en/posts
+    path: "{{slug}}/index"
+    create: true
+    fields:
+      - { label: "Title", name: title, widget: string }
+      - { label: "Date", name: date, widget: datetime }
+      - { label: "Tags", name: tags, widget: list, required: false }
+      - { label: "Body", name: body, widget: markdown }
