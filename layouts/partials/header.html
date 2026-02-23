@@ -60,7 +60,11 @@
                     {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
                     {{- $translations := .Translations }}
                     {{- if not $translations }}
-                        {{- $translations = site.Home.Translations }}
+                        {{- if eq .Kind "term" }}
+                            {{- $translations = .Parent.Translations }}
+                        {{- else }}
+                            {{- $translations = site.Home.Translations }}
+                        {{- end }}
                     {{- end }}
                     {{- with $translations }}
                     <ul class="lang-switch">
