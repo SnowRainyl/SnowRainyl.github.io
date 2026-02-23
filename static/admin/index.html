@@ -7,5 +7,102 @@
   </head>
   <body>
     <script src="https://cdn.jsdelivr.net/npm/@sveltia/cms/dist/sveltia-cms.js"></script>
+    <script>
+      (function () {
+        const DIVIDER_WIDTH = 5;
+        const MIN_PERCENT = 15;
+        const MAX_PERCENT = 85;
+
+        function addResizableDivider(container, left, right) {
+          if (container.dataset.resizableAdded) return;
+          container.dataset.resizableAdded = 'true';
+
+          const divider = document.createElement('div');
+          Object.assign(divider.style, {
+            width: DIVIDER_WIDTH + 'px',
+            minWidth: DIVIDER_WIDTH + 'px',
+            background: 'transparent',
+            cursor: 'col-resize',
+            flexShrink: '0',
+            position: 'relative',
+            zIndex: '100',
+          });
+
+          // 高亮指示线
+          const line = document.createElement('div');
+          Object.assign(line.style, {
+            position: 'absolute',
+            top: '0', bottom: '0',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '2px',
+            background: '#ccc',
+            opacity: '0',
+            transition: 'opacity 0.2s',
+          });
+          divider.appendChild(line);
+          divider.addEventListener('mouseenter', () => line.style.opacity = '1');
+          divider.addEventListener('mouseleave', () => { if (!dragging) line.style.opacity = '0'; });
+
+          container.insertBefore(divider, right);
+
+          let dragging = false;
+
+          divider.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            dragging = true;
+            line.style.opacity = '1';
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+
+            const startX = e.clientX;
+            const containerRect = container.getBoundingClientRect();
+            const startLeftW = left.getBoundingClientRect().width;
+
+            function onMove(e) {
+              const dx = e.clientX - startX;
+              const newLeftW = startLeftW + dx;
+              let pct = (newLeftW / containerRect.width) * 100;
+              pct = Math.min(MAX_PERCENT, Math.max(MIN_PERCENT, pct));
+              left.style.cssText += `flex: 0 0 ${pct}% !important; max-width: ${pct}% !important;`;
+              right.style.cssText += `flex: 1 1 0 !important; min-width: 0 !important;`;
+            }
+
+            function onUp() {
+              dragging = false;
+              line.style.opacity = '0';
+              document.body.style.cursor = '';
+              document.body.style.userSelect = '';
+              document.removeEventListener('mousemove', onMove);
+              document.removeEventListener('mouseup', onUp);
+            }
+
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+          });
+        }
+
+        function scanForEditorPanes() {
+          // Sveltia CMS 编辑器区域：找两个相邻的横向 flex 子元素
+          const candidates = document.querySelectorAll('main *, article *, [role="main"] *');
+          for (const el of candidates) {
+            if (el.dataset.resizableAdded) continue;
+            const style = getComputedStyle(el);
+            if (style.display !== 'flex') continue;
+            if (style.flexDirection === 'column') continue;
+            const children = Array.from(el.children).filter(c => {
+              const cs = getComputedStyle(c);
+              return cs.display !== 'none' && c.offsetWidth > 80;
+            });
+            if (children.length === 2) {
+              addResizableDivider(el, children[0], children[1]);
+            }
+          }
+        }
+
+        const observer = new MutationObserver(() => scanForEditorPanes());
+        observer.observe(document.body, { childList: true, subtree: true });
+      })();
+    </script>
   </body>
 </html>
