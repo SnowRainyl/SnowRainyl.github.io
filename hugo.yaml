@@ -51,6 +51,10 @@ params:
   
   comments: true
 
+  socialIcons:
+    - name: github
+      url: "https://github.com/SnowRainyl"
+
   profileMode:
     enabled: true
     title: "Hi, I'm SnowRainyl 👋"
