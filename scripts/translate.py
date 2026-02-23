@@ -12,34 +12,61 @@ import subprocess
 from google import genai
 
 
+def _remove_file(path):
+    """Remove a file and its parent directory if empty."""
+    os.remove(path)
+    parent = os.path.dirname(path)
+    if os.path.isdir(parent) and not os.listdir(parent):
+        os.rmdir(parent)
+
+
 def sync_deletions():
-    """Delete translation counterparts of posts deleted in the last commit."""
+    """Delete translation counterparts for two cases:
+    1. Posts deleted in the current commit (fast path via git diff).
+    2. Orphaned translations whose source was deleted in any past commit.
+    """
+    deleted = []
+
+    # ── 1. Current-commit deletions ──────────────────────────────────────────
     try:
         result = subprocess.run(
-            ['git', 'diff', '--name-status', 'HEAD^', 'HEAD'],
+            ['git', '-c', 'core.quotePath=false', 'diff', '--name-status', 'HEAD^', 'HEAD'],
             capture_output=True, text=True, check=True
         )
+        for line in result.stdout.splitlines():
+            if not line.startswith('D\t'):
+                continue
+            path = line[2:].strip()
+            if path.startswith('content/zh/posts/') and path.endswith('.md'):
+                counterpart = path.replace('content/zh/', 'content/en/', 1)
+            elif path.startswith('content/en/posts/') and path.endswith('.md'):
+                counterpart = path.replace('content/en/', 'content/zh/', 1)
+            else:
+                continue
+            if os.path.exists(counterpart):
+                _remove_file(counterpart)
+                print(f"Deleted counterpart: {counterpart}")
+                deleted.append(counterpart)
     except subprocess.CalledProcessError:
-        return []
+        pass  # No parent commit (initial commit)
 
-    deleted = []
-    for line in result.stdout.splitlines():
-        if not line.startswith('D\t'):
-            continue
-        path = line[2:].strip()
-        if path.startswith('content/zh/posts/') and path.endswith('.md'):
-            counterpart = path.replace('content/zh/', 'content/en/', 1)
-        elif path.startswith('content/en/posts/') and path.endswith('.md'):
-            counterpart = path.replace('content/en/', 'content/zh/', 1)
-        else:
-            continue
-        if os.path.exists(counterpart):
-            os.remove(counterpart)
-            parent = os.path.dirname(counterpart)
-            if os.path.isdir(parent) and not os.listdir(parent):
-                os.rmdir(parent)
-            print(f"Deleted counterpart: {counterpart}")
-            deleted.append(counterpart)
+    # ── 2. Historical orphans ─────────────────────────────────────────────────
+    # An en post is an orphan if its zh source was once committed but is now gone.
+    for lang_src, lang_dst in [('en', 'zh'), ('zh', 'en')]:
+        for path in glob.glob(f"content/{lang_src}/posts/**/*.md", recursive=True):
+            counterpart = path.replace(f'content/{lang_src}/', f'content/{lang_dst}/', 1)
+            if os.path.exists(counterpart):
+                continue  # Counterpart exists — not an orphan
+            # Check whether the counterpart was ever committed (i.e. was deleted)
+            log = subprocess.run(
+                ['git', 'log', '--oneline', '--', counterpart],
+                capture_output=True, text=True
+            )
+            if log.stdout.strip():
+                # Counterpart existed before → this file is an orphaned translation
+                _remove_file(path)
+                print(f"Removed orphaned translation: {path}")
+                deleted.append(path)
 
     return deleted
 

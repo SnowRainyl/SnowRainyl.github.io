@@ -6,12 +6,13 @@ on:
     paths:
       - "content/zh/posts/**/*.md"
       - "content/en/posts/**/*.md"
+  workflow_dispatch:
 
 jobs:
   translate:
     runs-on: ubuntu-latest
     # Skip commits that are themselves auto-translations or deletion syncs
-    if: "!contains(github.event.head_commit.message, 'auto: translate') && !contains(github.event.head_commit.message, 'auto: sync deletions')"
+    if: "github.event_name == 'workflow_dispatch' || (!contains(github.event.head_commit.message, 'auto: translate') && !contains(github.event.head_commit.message, 'auto: sync deletions'))"
     permissions:
       contents: write
 
