@@ -2,6 +2,7 @@ backend:
   name: github
   repo: SnowRainyl/SnowRainyl.github.io
   branch: main
+  base_url: https://snowrainyl.snowflow062.workers.dev
 
 media_folder: static/uploads
 public_folder: /uploads
