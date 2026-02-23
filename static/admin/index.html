@@ -9,7 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@sveltia/cms/dist/sveltia-cms.js"></script>
     <script>
       (function () {
-        const DIVIDER_WIDTH = 5;
         const MIN_PERCENT = 15;
         const MAX_PERCENT = 85;
 
@@ -19,34 +18,35 @@
 
           const divider = document.createElement('div');
           Object.assign(divider.style, {
-            width: DIVIDER_WIDTH + 'px',
-            minWidth: DIVIDER_WIDTH + 'px',
+            width: '6px',
+            minWidth: '6px',
             background: 'transparent',
             cursor: 'col-resize',
             flexShrink: '0',
             position: 'relative',
-            zIndex: '100',
+            zIndex: '9999',
           });
 
-          // 高亮指示线
           const line = document.createElement('div');
           Object.assign(line.style, {
             position: 'absolute',
             top: '0', bottom: '0',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '2px',
-            background: '#ccc',
+            width: '3px',
+            borderRadius: '2px',
+            background: '#888',
             opacity: '0',
-            transition: 'opacity 0.2s',
+            transition: 'opacity 0.15s',
+            pointerEvents: 'none',
           });
           divider.appendChild(line);
+
+          let dragging = false;
           divider.addEventListener('mouseenter', () => line.style.opacity = '1');
           divider.addEventListener('mouseleave', () => { if (!dragging) line.style.opacity = '0'; });
 
           container.insertBefore(divider, right);
-
-          let dragging = false;
 
           divider.addEventListener('mousedown', (e) => {
             e.preventDefault();
@@ -56,16 +56,16 @@
             document.body.style.userSelect = 'none';
 
             const startX = e.clientX;
-            const containerRect = container.getBoundingClientRect();
+            const totalW = container.getBoundingClientRect().width;
             const startLeftW = left.getBoundingClientRect().width;
 
             function onMove(e) {
-              const dx = e.clientX - startX;
-              const newLeftW = startLeftW + dx;
-              let pct = (newLeftW / containerRect.width) * 100;
-              pct = Math.min(MAX_PERCENT, Math.max(MIN_PERCENT, pct));
-              left.style.cssText += `flex: 0 0 ${pct}% !important; max-width: ${pct}% !important;`;
-              right.style.cssText += `flex: 1 1 0 !important; min-width: 0 !important;`;
+              const pct = Math.min(MAX_PERCENT, Math.max(MIN_PERCENT,
+                ((startLeftW + e.clientX - startX) / totalW) * 100));
+              left.style.setProperty('flex', `0 0 ${pct}%`, 'important');
+              left.style.setProperty('max-width', `${pct}%`, 'important');
+              right.style.setProperty('flex', '1 1 0', 'important');
+              right.style.setProperty('min-width', '0', 'important');
             }
 
             function onUp() {
@@ -83,24 +83,43 @@
         }
 
         function scanForEditorPanes() {
-          // Sveltia CMS 编辑器区域：找两个相邻的横向 flex 子元素
-          const candidates = document.querySelectorAll('main *, article *, [role="main"] *');
-          for (const el of candidates) {
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+
+          // 扫描所有元素，找到足够大的横向 flex 容器，且恰好有两个可见的宽子元素
+          const all = document.querySelectorAll('*');
+          for (const el of all) {
             if (el.dataset.resizableAdded) continue;
-            const style = getComputedStyle(el);
-            if (style.display !== 'flex') continue;
-            if (style.flexDirection === 'column') continue;
-            const children = Array.from(el.children).filter(c => {
-              const cs = getComputedStyle(c);
-              return cs.display !== 'none' && c.offsetWidth > 80;
+            if (el === document.body || el === document.documentElement) continue;
+
+            const rect = el.getBoundingClientRect();
+            // 容器必须覆盖至少 55% 视口宽、30% 视口高，才可能是编辑器主区域
+            if (rect.width < vw * 0.55 || rect.height < vh * 0.30) continue;
+
+            const st = getComputedStyle(el);
+            if (st.display !== 'flex') continue;
+            const dir = st.flexDirection;
+            if (dir === 'column' || dir === 'column-reverse') continue;
+
+            const visibleChildren = Array.from(el.children).filter(c => {
+              if (getComputedStyle(c).display === 'none') return false;
+              const w = c.getBoundingClientRect().width;
+              return w > vw * 0.08; // 每栏至少占视口 8%
             });
-            if (children.length === 2) {
-              addResizableDivider(el, children[0], children[1]);
+
+            if (visibleChildren.length === 2) {
+              addResizableDivider(el, visibleChildren[0], visibleChildren[1]);
             }
           }
         }
 
-        const observer = new MutationObserver(() => scanForEditorPanes());
+        let timer;
+        function debouncedScan() {
+          clearTimeout(timer);
+          timer = setTimeout(() => requestAnimationFrame(scanForEditorPanes), 300);
+        }
+
+        const observer = new MutationObserver(debouncedScan);
         observer.observe(document.body, { childList: true, subtree: true });
       })();
     </script>
