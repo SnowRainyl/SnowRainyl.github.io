@@ -11,7 +11,13 @@
       "Bash(git stash:*)",
       "Bash(git rm:*)",
       "Read(//Users/snow/.ssh/**)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(grep \"categories:\" /Users/snow/Public/Blog/content/en/posts/*/index.md)",
+      "Bash(gh run list:*)",
+      "Bash(python3:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(curl:*)"
     ]
   }
 }

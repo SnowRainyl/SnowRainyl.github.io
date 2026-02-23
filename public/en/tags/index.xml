@@ -1,11 +1,1 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>Tags on SnowRainyl&#39;s Blog</title>
-    <link>https://snowrainyl.github.io/en/tags/</link>
-    <description>Recent content in Tags on SnowRainyl&#39;s Blog</description>
-    <generator>Hugo -- 0.156.0</generator>
-    <language>en</language>
-    <atom:link href="https://snowrainyl.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Tags on SnowRainyl's Blog</title><link>https://snowrainyl.github.io/en/tags/</link><description>Recent content in Tags on SnowRainyl's Blog</description><generator>Hugo -- 0.156.0</generator><language>en</language><lastBuildDate>Mon, 23 Feb 2026 15:26:00 +0000</lastBuildDate><atom:link href="https://snowrainyl.github.io/en/tags/index.xml" rel="self" type="application/rss+xml"/><item><title>Testing</title><link>https://snowrainyl.github.io/en/tags/testing/</link><pubDate>Mon, 23 Feb 2026 15:26:00 +0000</pubDate><guid>https://snowrainyl.github.io/en/tags/testing/</guid><description/></item><item><title>Test</title><link>https://snowrainyl.github.io/en/tags/test/</link><pubDate>Mon, 23 Feb 2026 15:25:00 +0000</pubDate><guid>https://snowrainyl.github.io/en/tags/test/</guid><description/></item></channel></rss>

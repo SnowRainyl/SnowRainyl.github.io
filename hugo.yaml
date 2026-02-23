@@ -30,6 +30,14 @@ languages:
         - name: 搜索
           url: /search/
           weight: 3
+    params:
+      profileMode:
+        enabled: true
+        title: "你好，我是飞雪有声 👋"
+        subtitle: "欢迎来到我的博客。"
+        imageUrl: "https://github.com/SnowRainyl.png"
+        imageWidth: 120
+        imageHeight: 120
   en:
     languageName: "English"
     weight: 2
@@ -46,6 +54,14 @@ languages:
         - name: Search
           url: /search/
           weight: 3
+    params:
+      profileMode:
+        enabled: true
+        title: "Hi, I'm SnowRainyl 👋"
+        subtitle: "Welcome to my blog."
+        imageUrl: "https://github.com/SnowRainyl.png"
+        imageWidth: 120
+        imageHeight: 120
 
 params:
   author: "SnowRainyl"
@@ -54,17 +70,15 @@ params:
   ShowReadingTime: true
   ShowWordCount: true
   ShowToc: true
-  
+
   comments: true
+
+  assets:
+    favicon: "favicon.png"
+    favicon16x16: "favicon.png"
+    favicon32x32: "favicon.png"
+    apple_touch_icon: "favicon.png"
 
   socialIcons:
     - name: github
       url: "https://github.com/SnowRainyl"
-
-  profileMode:
-    enabled: true
-    title: "Hi, I'm SnowRainyl 👋"
-    subtitle: "Welcome to my clean and simple blog."
-    imageUrl: "https://github.com/SnowRainyl.png"
-    imageWidth: 120
-    imageHeight: 120
