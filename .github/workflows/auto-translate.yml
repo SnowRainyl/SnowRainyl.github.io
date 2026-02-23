@@ -1,0 +1,44 @@
+name: Auto Translate Posts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/zh/posts/**/*.md"
+      - "content/en/posts/**/*.md"
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    # Skip commits that are themselves auto-translations
+    if: "!contains(github.event.head_commit.message, 'auto: translate')"
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install google-generativeai
+
+      - name: Translate new posts
+        run: python scripts/translate.py
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+
+      - name: Commit translated posts
+        run: |
+          git config user.name "Translation Bot"
+          git config user.email "noreply@github.com"
+          git add content/
+          git diff --staged --quiet || (
+            git commit -m "auto: translate new posts [skip ci]" &&
+            git push
+          )
