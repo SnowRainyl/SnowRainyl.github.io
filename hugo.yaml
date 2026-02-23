@@ -49,6 +49,8 @@ params:
   ShowWordCount: true
   ShowToc: true
   
+  comments: true
+
   profileMode:
     enabled: true
     title: "Hi, I'm SnowRainyl 👋"
