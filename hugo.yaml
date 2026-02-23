@@ -2,26 +2,22 @@ baseURL: "http://snowrainy.org/"
 title: "SnowRainyl's Blog"
 theme: "PaperMod"
 
-# 🌟 关键修复：添加网站作者信息
-author:
-  name: "SnowRainyl"
-
 paginate: 10
 defaultContentLanguage: zh
 defaultContentLanguageInSubdir: false
 
-# 中英双语与文件夹对应配置
+# 中英双语配置
 languages:
   zh:
     languageName: "中文"
     weight: 1
     title: "SnowRainyl 的博客"
-    contentDir: content/zh/posts
+    contentDir: content/zh
   en:
     languageName: "English"
     weight: 2
     title: "SnowRainyl's Blog"
-    contentDir: content/en/posts
+    contentDir: content/en
 
 params:
   env: production
@@ -29,9 +25,7 @@ params:
   ShowReadingTime: true
   ShowWordCount: true
   ShowToc: true
-  author: "SnowRainyl" # 在参数里也备用一份，确保万无一失
   
-  # 首页的个人名片配置
   profileMode:
     enabled: true
     title: "Hi, I'm SnowRainyl 👋"
