@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SnowRainyl 的博客后台</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/@sveltia/cms/dist/sveltia-cms.js"></script>
+    <script>
+      (function () {
+        const MIN_PERCENT = 15;
+        const MAX_PERCENT = 85;
+
+        function addResizableDivider(container, left, right) {
+          if (container.dataset.resizableAdded) return;
+          container.dataset.resizableAdded = 'true';
+
+          const divider = document.createElement('div');
+          Object.assign(divider.style, {
+            width: '6px',
+            minWidth: '6px',
+            background: 'transparent',
+            cursor: 'col-resize',
+            flexShrink: '0',
+            position: 'relative',
+            zIndex: '9999',
+          });
+
+          const line = document.createElement('div');
+          Object.assign(line.style, {
+            position: 'absolute',
+            top: '0', bottom: '0',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '3px',
+            borderRadius: '2px',
+            background: '#888',
+            opacity: '0',
+            transition: 'opacity 0.15s',
+            pointerEvents: 'none',
+          });
+          divider.appendChild(line);
+
+          let dragging = false;
+          divider.addEventListener('mouseenter', () => line.style.opacity = '1');
+          divider.addEventListener('mouseleave', () => { if (!dragging) line.style.opacity = '0'; });
+
+          container.insertBefore(divider, right);
+
+          divider.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            dragging = true;
+            line.style.opacity = '1';
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
+
+            const startX = e.clientX;
+            const totalW = container.getBoundingClientRect().width;
+            const startLeftW = left.getBoundingClientRect().width;
+
+            function onMove(e) {
+              const pct = Math.min(MAX_PERCENT, Math.max(MIN_PERCENT,
+                ((startLeftW + e.clientX - startX) / totalW) * 100));
+              left.style.setProperty('flex', `0 0 ${pct}%`, 'important');
+              left.style.setProperty('max-width', `${pct}%`, 'important');
+              right.style.setProperty('flex', '1 1 0', 'important');
+              right.style.setProperty('min-width', '0', 'important');
+            }
+
+            function onUp() {
+              dragging = false;
+              line.style.opacity = '0';
+              document.body.style.cursor = '';
+              document.body.style.userSelect = '';
+              document.removeEventListener('mousemove', onMove);
+              document.removeEventListener('mouseup', onUp);
+            }
+
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+          });
+        }
+
+        function scanForEditorPanes() {
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+
+          // 扫描所有元素，找到足够大的横向 flex 容器，且恰好有两个可见的宽子元素
+          const all = document.querySelectorAll('*');
+          for (const el of all) {
+            if (el.dataset.resizableAdded) continue;
+            if (el === document.body || el === document.documentElement) continue;
+
+            const rect = el.getBoundingClientRect();
+            // 容器必须覆盖至少 55% 视口宽、30% 视口高，才可能是编辑器主区域
+            if (rect.width < vw * 0.55 || rect.height < vh * 0.30) continue;
+
+            const st = getComputedStyle(el);
+            if (st.display !== 'flex') continue;
+            const dir = st.flexDirection;
+            if (dir === 'column' || dir === 'column-reverse') continue;
+
+            const visibleChildren = Array.from(el.children).filter(c => {
+              if (getComputedStyle(c).display === 'none') return false;
+              const w = c.getBoundingClientRect().width;
+              return w > vw * 0.08; // 每栏至少占视口 8%
+            });
+
+            if (visibleChildren.length === 2) {
+              addResizableDivider(el, visibleChildren[0], visibleChildren[1]);
+            }
+          }
+        }
+
+        let timer;
+        function debouncedScan() {
+          clearTimeout(timer);
+          timer = setTimeout(() => requestAnimationFrame(scanForEditorPanes), 300);
+        }
+
+        const observer = new MutationObserver(debouncedScan);
+        observer.observe(document.body, { childList: true, subtree: true });
+      })();
+    </script>
+  </body>
+</html>

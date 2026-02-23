@@ -7,6 +7,7 @@ translates any that don't have a corresponding version in the other language.
 
 import glob
 import os
+import shutil
 import subprocess
 from google import genai
 
@@ -109,6 +110,17 @@ def main():
         with open(dst, "w", encoding="utf-8") as f:
             f.write(translated + "\n")
         print(f"Created: {dst}")
+
+        # Copy page bundle resources (images, etc.) to translation directory
+        src_dir = os.path.dirname(src)
+        dst_dir = os.path.dirname(dst)
+        for resource in os.listdir(src_dir):
+            if not resource.endswith(".md"):
+                src_res = os.path.join(src_dir, resource)
+                dst_res = os.path.join(dst_dir, resource)
+                if os.path.isfile(src_res) and not os.path.exists(dst_res):
+                    shutil.copy2(src_res, dst_res)
+                    print(f"Copied resource: {dst_res}")
 
     print(f"\nDone: translated {len(pairs)} post(s).")
 
