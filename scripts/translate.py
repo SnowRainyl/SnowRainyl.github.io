@@ -7,7 +7,40 @@ translates any that don't have a corresponding version in the other language.
 
 import glob
 import os
+import subprocess
 from google import genai
+
+
+def sync_deletions():
+    """Delete translation counterparts of posts deleted in the last commit."""
+    try:
+        result = subprocess.run(
+            ['git', 'diff', '--name-status', 'HEAD^', 'HEAD'],
+            capture_output=True, text=True, check=True
+        )
+    except subprocess.CalledProcessError:
+        return []
+
+    deleted = []
+    for line in result.stdout.splitlines():
+        if not line.startswith('D\t'):
+            continue
+        path = line[2:].strip()
+        if path.startswith('content/zh/posts/') and path.endswith('.md'):
+            counterpart = path.replace('content/zh/', 'content/en/', 1)
+        elif path.startswith('content/en/posts/') and path.endswith('.md'):
+            counterpart = path.replace('content/en/', 'content/zh/', 1)
+        else:
+            continue
+        if os.path.exists(counterpart):
+            os.remove(counterpart)
+            parent = os.path.dirname(counterpart)
+            if os.path.isdir(parent) and not os.listdir(parent):
+                os.rmdir(parent)
+            print(f"Deleted counterpart: {counterpart}")
+            deleted.append(counterpart)
+
+    return deleted
 
 
 def get_untranslated_posts():
@@ -45,9 +78,14 @@ def translate(client, content, from_lang, to_lang):
 def main():
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
+    deleted = sync_deletions()
+    if deleted:
+        print(f"Synced {len(deleted)} deletion(s).")
+
     pairs = get_untranslated_posts()
     if not pairs:
-        print("All posts already have translations.")
+        if not deleted:
+            print("All posts already have translations.")
         return
 
     print(f"Found {len(pairs)} post(s) to translate:")
