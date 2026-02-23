@@ -11,11 +11,27 @@ import google.generativeai as genai
 
 def get_added_posts(before_sha, after_sha):
     """Return markdown files that were Added in this push."""
-    result = subprocess.run(
-        ["git", "diff", "--name-only", "--diff-filter=A", before_sha, after_sha],
-        capture_output=True, text=True, check=True,
-    )
-    return [f for f in result.stdout.strip().splitlines() if f.endswith(".md")]
+    print(f"[debug] BEFORE_SHA={before_sha}")
+    print(f"[debug] AFTER_SHA={after_sha}")
+
+    ZERO_SHA = "0" * 40
+
+    if before_sha and before_sha != ZERO_SHA:
+        # Normal push: compare before → after
+        result = subprocess.run(
+            ["git", "diff", "--name-only", "--diff-filter=A", before_sha, after_sha],
+            capture_output=True, text=True,
+        )
+    else:
+        # First push or unknown base: scan last commit only
+        result = subprocess.run(
+            ["git", "log", "-1", "--diff-filter=A", "--name-only", "--format="],
+            capture_output=True, text=True,
+        )
+
+    files = [f for f in result.stdout.strip().splitlines() if f.endswith(".md")]
+    print(f"[debug] detected added .md files: {files}")
+    return files
 
 
 def translate(model, content, from_lang, to_lang):
