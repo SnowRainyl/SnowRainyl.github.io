@@ -38,7 +38,7 @@ def translate(client, content, from_lang, to_lang):
         "---\n"
         f"{content}"
     )
-    response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+    response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
     return response.text.strip()
 
 
@@ -61,7 +61,11 @@ def main():
         with open(src, encoding="utf-8") as f:
             content = f.read()
 
-        translated = translate(client, content, from_lang, to_lang)
+        try:
+            translated = translate(client, content, from_lang, to_lang)
+        except Exception as e:
+            print(f"ERROR translating {src}: {e}")
+            continue
 
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         with open(dst, "w", encoding="utf-8") as f:
