@@ -14,7 +14,7 @@
 | 静态站点生成 | [Hugo](https://gohugo.io/) + [PaperMod](https://github.com/adityatelange/hugo-PaperMod) 主题 |
 | 托管 & 部署 | GitHub Pages + GitHub Actions |
 | 后台管理 | [Sveltia CMS](https://github.com/sveltia/sveltia-cms)（访问 `/admin`） |
-| CMS OAuth 认证 | Cloudflare Workers |
+| CMS OAuth 认证 | [Cloudflare Workers](https://workers.cloudflare.com/)（处理 GitHub OAuth 回调） |
 | 自动翻译 | Google Gemini API（`gemini-3-flash-preview`） |
 | 评论 & 点赞 | [Giscus](https://giscus.app/)（基于 GitHub Discussions） |
 
