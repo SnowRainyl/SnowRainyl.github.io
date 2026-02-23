@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Auto Translate Posts"]
+    types: [completed]
+    branches: [main]
 
 permissions:
   contents: read
@@ -12,16 +16,21 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Only deploy if triggered directly, or if auto-translate succeeded
+    if: >
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
+          ref: main
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
