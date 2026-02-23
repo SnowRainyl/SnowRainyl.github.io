@@ -13,11 +13,27 @@ languages:
     weight: 1
     title: "SnowRainyl 的博客"
     contentDir: content/zh
+    menu:
+      main:
+        - name: 文章
+          url: /posts/
+          weight: 1
+        - name: 搜索
+          url: /search/
+          weight: 2
   en:
     languageName: "English"
     weight: 2
     title: "SnowRainyl's Blog"
     contentDir: content/en
+    menu:
+      main:
+        - name: Posts
+          url: /posts/
+          weight: 1
+        - name: Search
+          url: /search/
+          weight: 2
 
 params:
   author:
