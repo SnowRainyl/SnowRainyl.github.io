@@ -6,7 +6,7 @@ Called by GitHub Actions when content/zh/posts/** or content/en/posts/** changes
 
 import os
 import subprocess
-import google.generativeai as genai
+from google import genai
 
 
 def get_added_posts(before_sha, after_sha):
@@ -48,7 +48,9 @@ def translate(model, content, from_lang, to_lang):
         "---\n"
         f"{content}"
     )
-    response = model.generate_content(prompt)
+    response = model.models.generate_content(
+        model="gemini-2.0-flash", contents=prompt
+    )
     return response.text.strip()
 
 
@@ -56,8 +58,7 @@ def main():
     before_sha = os.environ.get("BEFORE_SHA", "HEAD~1")
     after_sha = os.environ.get("AFTER_SHA", "HEAD")
 
-    genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    model = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
     added = get_added_posts(before_sha, after_sha)
     if not added:

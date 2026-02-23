@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install google-generativeai
+      - run: pip install google-genai
 
       - name: Translate new posts
         run: python scripts/translate.py
