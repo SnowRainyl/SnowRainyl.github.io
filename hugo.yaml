@@ -3,6 +3,12 @@ title: "SnowRainyl's Blog"
 theme: "PaperMod"
 
 paginate: 10
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
 defaultContentLanguage: zh
 defaultContentLanguageInSubdir: false
 
