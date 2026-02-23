@@ -1,0 +1,33 @@
+{{- define "main" }}
+
+{{- if .Title }}
+<header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{- if .Description }}
+    <div class="post-description">
+        {{ .Description }}
+    </div>
+    {{- end }}
+</header>
+{{- end }}
+
+<ul class="terms-tags">
+    {{- $type := .Type }}
+    {{- /* Build a sortable list of (weight, term, count) so we can order by _index.md weight */}}
+    {{- $items := slice }}
+    {{- range .Data.Terms.Alphabetical }}
+        {{- $name := .Name }}
+        {{- $count := .Count }}
+        {{- $page := site.GetPage (printf "/%s/%s" $type $name) }}
+        {{- if $page }}
+            {{- $items = $items | append (dict "weight" $page.Weight "page" $page "count" $count) }}
+        {{- end }}
+    {{- end }}
+    {{- range sort $items "weight" }}
+    <li>
+        <a href="{{ .page.Permalink }}">{{ .page.Name }} <sup><strong><sup>{{ .count }}</sup></strong></sup> </a>
+    </li>
+    {{- end }}
+</ul>
+
+{{- end }}{{/* end main */ -}}
