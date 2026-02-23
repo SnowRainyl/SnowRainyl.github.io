@@ -30,8 +30,6 @@ jobs:
         run: python scripts/translate.py
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BEFORE_SHA: ${{ github.event.before }}
-          AFTER_SHA: ${{ github.event.after }}
 
       - name: Commit translated posts
         run: |

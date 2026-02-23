@@ -1,40 +1,30 @@
 #!/usr/bin/env python3
 """
-Auto-translate newly added Hugo blog posts between Chinese and English.
-Called by GitHub Actions when content/zh/posts/** or content/en/posts/** changes.
+Auto-translate Hugo blog posts that are missing a translation.
+Scans all posts in content/zh/posts and content/en/posts,
+translates any that don't have a corresponding version in the other language.
 """
 
+import glob
 import os
-import subprocess
 from google import genai
 
 
-def get_added_posts(before_sha, after_sha):
-    """Return markdown files that were Added in this push."""
-    print(f"[debug] BEFORE_SHA={before_sha}")
-    print(f"[debug] AFTER_SHA={after_sha}")
-
-    ZERO_SHA = "0" * 40
-
-    if before_sha and before_sha != ZERO_SHA:
-        # Normal push: compare before → after
-        result = subprocess.run(
-            ["git", "diff", "--name-only", "--diff-filter=A", before_sha, after_sha],
-            capture_output=True, text=True,
-        )
-    else:
-        # First push or unknown base: scan last commit only
-        result = subprocess.run(
-            ["git", "log", "-1", "--diff-filter=A", "--name-only", "--format="],
-            capture_output=True, text=True,
-        )
-
-    files = [f for f in result.stdout.strip().splitlines() if f.endswith(".md")]
-    print(f"[debug] detected added .md files: {files}")
-    return files
+def get_untranslated_posts():
+    """Return (src_path, from_lang, to_lang) for every post missing a translation."""
+    pairs = []
+    for src in sorted(glob.glob("content/zh/posts/**/*.md", recursive=True)):
+        dst = src.replace("content/zh/", "content/en/", 1)
+        if not os.path.exists(dst):
+            pairs.append((src, "zh", "en"))
+    for src in sorted(glob.glob("content/en/posts/**/*.md", recursive=True)):
+        dst = src.replace("content/en/", "content/zh/", 1)
+        if not os.path.exists(dst):
+            pairs.append((src, "en", "zh"))
+    return pairs
 
 
-def translate(model, content, from_lang, to_lang):
+def translate(client, content, from_lang, to_lang):
     lang_name = {"zh": "Chinese (Simplified)", "en": "English"}
     prompt = (
         f"Translate the following Hugo blog post from {lang_name[from_lang]} "
@@ -48,55 +38,37 @@ def translate(model, content, from_lang, to_lang):
         "---\n"
         f"{content}"
     )
-    response = model.models.generate_content(
-        model="gemini-2.0-flash", contents=prompt
-    )
+    response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
     return response.text.strip()
 
 
 def main():
-    before_sha = os.environ.get("BEFORE_SHA", "HEAD~1")
-    after_sha = os.environ.get("AFTER_SHA", "HEAD")
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-    model = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-
-    added = get_added_posts(before_sha, after_sha)
-    if not added:
-        print("No new posts detected.")
+    pairs = get_untranslated_posts()
+    if not pairs:
+        print("All posts already have translations.")
         return
 
-    results = []
-    for src in added:
-        if src.startswith("content/zh/posts/"):
-            dst = src.replace("content/zh/", "content/en/", 1)
-            from_lang, to_lang = "zh", "en"
-        elif src.startswith("content/en/posts/"):
-            dst = src.replace("content/en/", "content/zh/", 1)
-            from_lang, to_lang = "en", "zh"
-        else:
-            continue
+    print(f"Found {len(pairs)} post(s) to translate:")
+    for src, fl, tl in pairs:
+        print(f"  {src}  ({fl} → {tl})")
 
-        if os.path.exists(dst):
-            print(f"Skip (already exists): {dst}")
-            continue
+    for src, from_lang, to_lang in pairs:
+        dst = src.replace(f"content/{from_lang}/", f"content/{to_lang}/", 1)
+        print(f"\nTranslating: {src} → {dst}")
 
-        print(f"Translating {src} → {dst}")
         with open(src, encoding="utf-8") as f:
             content = f.read()
 
-        translated = translate(model, content, from_lang, to_lang)
+        translated = translate(client, content, from_lang, to_lang)
 
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         with open(dst, "w", encoding="utf-8") as f:
             f.write(translated + "\n")
-
-        results.append(dst)
         print(f"Created: {dst}")
 
-    if results:
-        print(f"\nDone: translated {len(results)} post(s).")
-    else:
-        print("Nothing to translate.")
+    print(f"\nDone: translated {len(pairs)} post(s).")
 
 
 if __name__ == "__main__":
