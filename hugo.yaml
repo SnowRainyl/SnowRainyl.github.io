@@ -1,6 +1,9 @@
-baseURL: "http://snowrainy.org/"
+baseURL: "https://SnowRainyl.github.io/"
 title: "SnowRainyl's Blog"
 theme: "PaperMod"
+
+author:
+  name: "SnowRainyl"
 
 paginate: 10
 defaultContentLanguage: zh
