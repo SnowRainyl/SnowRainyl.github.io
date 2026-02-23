@@ -2,112 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://snowrainyl.github.io/en/posts/%E6%9C%80%E7%BB%88%E7%89%88%E6%B5%8B%E8%AF%95-%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/</loc>
-    <lastmod>2026-02-23T12:26:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/posts/%E6%9C%80%E7%BB%88%E7%89%88%E6%B5%8B%E8%AF%95-%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/posts/%E6%9C%80%E7%BB%88%E7%89%88%E6%B5%8B%E8%AF%95-%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/"
-                />
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/posts/</loc>
-    <lastmod>2026-02-23T12:26:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/posts/"
-                />
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/</loc>
-    <lastmod>2026-02-23T12:26:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/"
-                />
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/posts/%E7%AC%AC%E5%9B%9B%E6%AC%A1%E6%B5%8B%E8%AF%95/</loc>
-    <lastmod>2026-02-23T12:22:00+00:00</lastmod>
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/posts/%E7%AC%AC%E4%B8%89%E4%B8%AA%E6%B5%8B%E8%AF%95%E4%B8%8D%E7%9F%A5%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/</loc>
-    <lastmod>2026-02-23T11:36:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/posts/%E7%AC%AC%E4%B8%89%E4%B8%AA%E6%B5%8B%E8%AF%95%E4%B8%8D%E7%9F%A5%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/posts/%E7%AC%AC%E4%B8%89%E4%B8%AA%E6%B5%8B%E8%AF%95%E4%B8%8D%E7%9F%A5%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/"
-                />
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/posts/%E5%8F%88%E6%98%AF%E4%B8%80%E7%89%88%E6%9C%AC%E6%96%B0%E6%B5%8B%E8%AF%95/</loc>
-    <lastmod>2026-02-23T11:33:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/posts/%E5%8F%88%E6%98%AF%E4%B8%80%E7%89%88%E6%9C%AC%E6%96%B0%E6%B5%8B%E8%AF%95/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/posts/%E5%8F%88%E6%98%AF%E4%B8%80%E7%89%88%E6%9C%AC%E6%96%B0%E6%B5%8B%E8%AF%95/"
-                />
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/posts/%E6%96%B0%E7%9A%84%E6%B5%8B%E8%AF%95/</loc>
-    <lastmod>2026-02-23T11:28:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/posts/%E6%96%B0%E7%9A%84%E6%B5%8B%E8%AF%95/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/posts/%E6%96%B0%E7%9A%84%E6%B5%8B%E8%AF%95/"
-                />
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/posts/test/</loc>
-    <lastmod>2026-02-23T10:59:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/posts/test/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/posts/test/"
-                />
-  </url><url>
-    <loc>https://snowrainyl.github.io/en/posts/my-first-post/</loc>
-    <lastmod>2026-02-23T10:34:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://snowrainyl.github.io/posts/my-first-post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://snowrainyl.github.io/en/posts/my-first-post/"
-                />
+    <loc>https://snowrainyl.github.io/en/categories/book-notes/</loc>
   </url><url>
     <loc>https://snowrainyl.github.io/en/categories/</loc>
     <xhtml:link
@@ -119,6 +14,20 @@
                 rel="alternate"
                 hreflang="en"
                 href="https://snowrainyl.github.io/en/categories/"
+                />
+  </url><url>
+    <loc>https://snowrainyl.github.io/en/categories/life--travel/</loc>
+  </url><url>
+    <loc>https://snowrainyl.github.io/en/posts/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://snowrainyl.github.io/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://snowrainyl.github.io/en/posts/"
                 />
   </url><url>
     <loc>https://snowrainyl.github.io/en/search/</loc>
@@ -133,6 +42,18 @@
                 href="https://snowrainyl.github.io/en/search/"
                 />
   </url><url>
+    <loc>https://snowrainyl.github.io/en/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://snowrainyl.github.io/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://snowrainyl.github.io/en/"
+                />
+  </url><url>
     <loc>https://snowrainyl.github.io/en/tags/</loc>
     <xhtml:link
                 rel="alternate"
@@ -144,5 +65,7 @@
                 hreflang="en"
                 href="https://snowrainyl.github.io/en/tags/"
                 />
+  </url><url>
+    <loc>https://snowrainyl.github.io/en/categories/tech--projects/</loc>
   </url>
 </urlset>

@@ -6,50 +6,6 @@
     <description>Recent content in 文章 on SnowRainyl 的博客</description>
     <generator>Hugo -- 0.156.0</generator>
     <language>zh</language>
-    <lastBuildDate>Mon, 23 Feb 2026 12:26:00 +0000</lastBuildDate>
     <atom:link href="https://snowrainyl.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>最终测试 - 成功了吗？</title>
-      <link>https://snowrainyl.github.io/posts/%E6%9C%80%E7%BB%88%E7%89%88%E6%B5%8B%E8%AF%95-%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/</link>
-      <pubDate>Mon, 23 Feb 2026 12:26:00 +0000</pubDate>
-      <guid>https://snowrainyl.github.io/posts/%E6%9C%80%E7%BB%88%E7%89%88%E6%B5%8B%E8%AF%95-%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/</guid>
-      <description>&lt;p&gt;希望能成功，Gemini，请加油。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>不确定第三次测试是否成功</title>
-      <link>https://snowrainyl.github.io/posts/%E7%AC%AC%E4%B8%89%E4%B8%AA%E6%B5%8B%E8%AF%95%E4%B8%8D%E7%9F%A5%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/</link>
-      <pubDate>Mon, 23 Feb 2026 11:36:00 +0000</pubDate>
-      <guid>https://snowrainyl.github.io/posts/%E7%AC%AC%E4%B8%89%E4%B8%AA%E6%B5%8B%E8%AF%95%E4%B8%8D%E7%9F%A5%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F/</guid>
-      <description>&lt;p&gt;我希望这次能成功，然后我会切换到不同的翻译模型。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>另一个新版本测试</title>
-      <link>https://snowrainyl.github.io/posts/%E5%8F%88%E6%98%AF%E4%B8%80%E7%89%88%E6%9C%AC%E6%96%B0%E6%B5%8B%E8%AF%95/</link>
-      <pubDate>Mon, 23 Feb 2026 11:33:00 +0000</pubDate>
-      <guid>https://snowrainyl.github.io/posts/%E5%8F%88%E6%98%AF%E4%B8%80%E7%89%88%E6%9C%AC%E6%96%B0%E6%B5%8B%E8%AF%95/</guid>
-      <description>&lt;p&gt;测试是否能被正常翻译成一篇英文文章。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>新测试</title>
-      <link>https://snowrainyl.github.io/posts/%E6%96%B0%E7%9A%84%E6%B5%8B%E8%AF%95/</link>
-      <pubDate>Mon, 23 Feb 2026 11:28:00 +0000</pubDate>
-      <guid>https://snowrainyl.github.io/posts/%E6%96%B0%E7%9A%84%E6%B5%8B%E8%AF%95/</guid>
-      <description>&lt;p&gt;测试英文版本是否会同时发布&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>测试</title>
-      <link>https://snowrainyl.github.io/posts/test/</link>
-      <pubDate>Mon, 23 Feb 2026 10:59:00 +0000</pubDate>
-      <guid>https://snowrainyl.github.io/posts/test/</guid>
-      <description>&lt;p&gt;新文章测试&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>你好，世界</title>
-      <link>https://snowrainyl.github.io/posts/my-first-post/</link>
-      <pubDate>Mon, 23 Feb 2026 10:34:00 +0000</pubDate>
-      <guid>https://snowrainyl.github.io/posts/my-first-post/</guid>
-      <description>&lt;p&gt;这是我的第一篇文章。&lt;/p&gt;
-&lt;p&gt;&lt;img alt=&#34;pic1&#34; loading=&#34;lazy&#34; src=&#34;pareto_curves.png&#34;&gt;&lt;/p&gt;</description>
-    </item>
   </channel>
 </rss>

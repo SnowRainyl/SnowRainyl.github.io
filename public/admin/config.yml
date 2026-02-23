@@ -16,6 +16,15 @@ collections:
     fields:
       - { label: "标题", name: title, widget: string }
       - { label: "发布时间", name: date, widget: datetime }
+      - label: "分类"
+        name: categories
+        widget: select
+        required: false
+        multiple: false
+        options:
+          - { label: "技术探索", value: "技术探索" }
+          - { label: "读书笔记", value: "读书笔记" }
+          - { label: "生活随笔", value: "生活随笔" }
       - { label: "标签", name: tags, widget: list, required: false }
       - { label: "正文", name: body, widget: markdown }
 
@@ -27,5 +36,14 @@ collections:
     fields:
       - { label: "Title", name: title, widget: string }
       - { label: "Date", name: date, widget: datetime }
+      - label: "Category"
+        name: categories
+        widget: select
+        required: false
+        multiple: false
+        options:
+          - { label: "Tech & Projects", value: "Tech & Projects" }
+          - { label: "Book Notes", value: "Book Notes" }
+          - { label: "Life & Travel", value: "Life & Travel" }
       - { label: "Tags", name: tags, widget: list, required: false }
       - { label: "Body", name: body, widget: markdown }
