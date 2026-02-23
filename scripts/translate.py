@@ -9,6 +9,7 @@ import glob
 import os
 import shutil
 import subprocess
+import time
 from google import genai
 
 
@@ -99,8 +100,17 @@ def translate(client, content, from_lang, to_lang):
         "---\n"
         f"{content}"
     )
-    response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
-    return response.text.strip()
+    for attempt in range(3):
+        try:
+            response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
+            return response.text.strip()
+        except Exception as e:
+            if attempt < 2:
+                wait = 20 * (attempt + 1)  # 20s, then 40s
+                print(f"  Attempt {attempt + 1} failed ({e}), retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                raise
 
 
 def main():
