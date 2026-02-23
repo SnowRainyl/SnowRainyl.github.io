@@ -56,23 +56,36 @@
                 {{- end }}
 
                 {{- if (not site.Params.disableLangToggle) }}
-                    {{- $lang := .Lang}}
-                    {{- $separator := or $label_text (not site.Params.disableThemeToggle)}}
-                    {{- $translations := .Translations }}
-                    {{- if not $translations }}
-                        {{- if eq .Kind "term" }}
-                            {{- $translations = .Parent.Translations }}
-                        {{- else }}
-                            {{- $translations = site.Home.Translations }}
-                        {{- end }}
+                    {{- $lang := .Lang }}
+                    {{- $separator := or $label_text (not site.Params.disableThemeToggle) }}
+                    {{- $isTerm := eq .Kind "term" }}
+                    {{- /* For term pages: strip the current-language prefix from the parent path
+                           so we can re-attach the other language's base URL later.
+                           e.g. /en/categories/ → categories/   or   /categories/ → categories/ */}}
+                    {{- $parentRelPath := "" }}
+                    {{- if $isTerm }}
+                        {{- $parentRelPath = .Parent.RelPermalink | strings.TrimPrefix (printf "/%s" .Lang) | strings.TrimPrefix "/" }}
                     {{- end }}
-                    {{- with $translations }}
+                    {{- with site.Home.Translations }}
                     <ul class="lang-switch">
                         {{- if $separator }}<li>|</li>{{ end }}
-                        {{- range . -}}
-                        {{- if ne $lang .Lang }}
+                        {{- range . }}
+                        {{- $otherLang := .Lang }}
+                        {{- if ne $lang $otherLang }}
+                        {{- /* Default: link to the other language's home page */}}
+                        {{- $href := .Permalink }}
+                        {{- if $.Translations }}
+                            {{- /* Regular page with a translation: link directly to it */}}
+                            {{- range $.Translations }}
+                                {{- if eq .Lang $otherLang }}{{- $href = .Permalink }}{{- end }}
+                            {{- end }}
+                        {{- else if $isTerm }}
+                            {{- /* Taxonomy term page: link to the taxonomy list in the other language
+                                   e.g. /en/ + categories/ = /en/categories/ */}}
+                            {{- $href = printf "%s%s" .RelPermalink $parentRelPath }}
+                        {{- end }}
                         <li>
-                            <a href="{{- .Permalink -}}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
+                            <a href="{{ $href }}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) | default (.Lang | title) }}"
                                 aria-label="{{ .Language.LanguageName | default (.Lang | title) }}">
                                 {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
                                 {{- .Language.LanguageName | emojify -}}
@@ -81,8 +94,8 @@
                                 {{- end -}}
                             </a>
                         </li>
-                        {{- end -}}
-                        {{- end}}
+                        {{- end }}
+                        {{- end }}
                     </ul>
                     {{- end }}
                 {{- end }}
