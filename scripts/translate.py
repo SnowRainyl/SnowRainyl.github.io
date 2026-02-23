@@ -7,10 +7,51 @@ translates any that don't have a corresponding version in the other language.
 
 import glob
 import os
+import re
 import shutil
 import subprocess
 import time
 from google import genai
+
+# Fixed category name mapping — never let AI translate these freely
+CATEGORY_MAP = {
+    ("zh", "en"): {
+        "技术探索": "Tech & Projects",
+        "读书笔记": "Book Notes",
+        "生活随笔": "Life & Travel",
+    },
+    ("en", "zh"): {
+        "Tech & Projects": "技术探索",
+        "Book Notes": "读书笔记",
+        "Life & Travel": "生活随笔",
+    },
+}
+
+
+def fix_categories(translated: str, original: str, from_lang: str, to_lang: str) -> str:
+    """Override AI-translated categories with the correct mapped value."""
+    mapping = CATEGORY_MAP.get((from_lang, to_lang), {})
+    if not mapping:
+        return translated
+
+    # Extract categories value from original front matter (string or list format)
+    m = re.search(r'^categories:\s*(.+)$', original, re.MULTILINE)
+    if not m:
+        return translated
+
+    original_cat = m.group(1).strip()
+    mapped_cat = mapping.get(original_cat)
+    if not mapped_cat:
+        return translated
+
+    # Replace whatever the AI wrote for categories with the correct mapped value
+    translated = re.sub(
+        r'^(categories:).*$',
+        f'\\1 {mapped_cat}',
+        translated,
+        flags=re.MULTILINE,
+    )
+    return translated
 
 
 def _remove_file(path):
@@ -139,6 +180,7 @@ def main():
 
         try:
             translated = translate(client, content, from_lang, to_lang)
+            translated = fix_categories(translated, content, from_lang, to_lang)
         except Exception as e:
             print(f"ERROR translating {src}: {e}")
             continue

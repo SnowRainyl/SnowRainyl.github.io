@@ -1,7 +1,7 @@
 ---
 title: Testing Category Functionality - Life Essays
 date: 2026-02-23T15:26:00
-categories: Life Essays
+categories: Life & Travel
 tags:
   - Testing
 ---

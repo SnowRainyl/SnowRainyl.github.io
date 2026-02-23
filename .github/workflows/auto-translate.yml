@@ -8,6 +8,10 @@ on:
       - "content/en/posts/**/*.md"
   workflow_dispatch:
 
+concurrency:
+  group: translate
+  cancel-in-progress: true
+
 jobs:
   translate:
     runs-on: ubuntu-latest
@@ -40,7 +44,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "Nothing to commit."
           elif git diff --staged --name-status | grep -q "^D"; then
-            git commit -m "auto: sync deletions" && git push
+            git commit -m "auto: sync deletions" && git pull --rebase && git push
           else
-            git commit -m "auto: translate new posts" && git push
+            git commit -m "auto: translate new posts" && git pull --rebase && git push
           fi

@@ -1,7 +1,7 @@
 ---
 title: Testing Category Functionality - Reading Notes
 date: 2026-02-23T15:25:00
-categories: Reading Notes
+categories: Book Notes
 tags:
   - Test
 ---
