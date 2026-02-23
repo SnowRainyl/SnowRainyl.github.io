@@ -1,7 +1,10 @@
-# 如果你确定你的专属域名还能用，就把这里换成 "https://snowrainy.org/"
 baseURL: "https://SnowRainyl.github.io/"
 title: "SnowRainyl's Blog"
 theme: "PaperMod"
+
+# 🌟 关键修复：添加网站作者信息
+author:
+  name: "SnowRainyl"
 
 paginate: 10
 defaultContentLanguage: zh
@@ -26,6 +29,7 @@ params:
   ShowReadingTime: true
   ShowWordCount: true
   ShowToc: true
+  author: "SnowRainyl" # 在参数里也备用一份，确保万无一失
   
   # 首页的个人名片配置
   profileMode:
