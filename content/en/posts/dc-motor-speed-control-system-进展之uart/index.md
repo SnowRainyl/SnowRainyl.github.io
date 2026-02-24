@@ -1,5 +1,5 @@
 ---
-title: DC Motor Speed Control System Progress: UART
+title: "DC Motor Speed Control System Progress: UART"
 date: 2026-02-24T10:55:00
 categories: Tech & Projects
 tags:
