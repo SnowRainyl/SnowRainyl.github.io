@@ -115,7 +115,7 @@ class LeNet(nn.Module):
 
 1、继承自torch.nn.module：提供了训练所需的基础功能，例如参数管理、GPU转移等功能。
 
-2、_init_() 方法：在这里定义各个层。
+2、\__init\_\_() 方法：在这里定义各个层。
 
 ```plain
     def __init__(self):
