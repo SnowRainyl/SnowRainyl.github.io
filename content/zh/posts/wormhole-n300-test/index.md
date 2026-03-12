@@ -1,5 +1,5 @@
 ---
-title: Wormhole-n300 test
+title: Wormhole-n300 测试
 date: 2026-03-12T16:18:00
 categories: 技术探索
 tags:
@@ -13,7 +13,7 @@ pip install ttnn
 pip install torch
 ```
 
-I try to use a simple test program.
+我尝试用一个简单的测试程序。
 
 ```plain
 python3 -c "
@@ -47,29 +47,29 @@ print('wormhole is working')
 "
 ```
 
-result:
+结果：
 
 ![](20260312-161914.png)
 
-mask tensixs are different, and the chip 0 directly connects to the host pc by PCIe, and the chip 1 is remote by Ethernet.（`CPU ←── PCIe ──→ Chip 0 ←── Ethernet ──→ Chip 1`）
+mask tensix 是不同的，芯片 0 通过 PCIe 直接连接主机，芯片 1 则通过以太网远程连接。（`CPU ←── PCIe ──→ Chip 0 ←── Ethernet ──→ Chip 1`）
 
 ![](20260312-162003.png)
 
-bfloat16(wormhole) vs float32(cpu):0.210493
+bfloat16（wormhole）vs float32（cpu）：0.210493
 
-When I change the datatype from bfloat16 to float32:
+当我把数据类型从 bfloat16 改为 float32 时：
 
-max diff vs FP32:0.011194 k=4 
+max diff vs FP32:0.011194 k=4
 
-max diff vs FP32:0.032349 k=64 
+max diff vs FP32:0.032349 k=64
 
 max diff vs FP32:0.057039 k=128
 
-Maybe the order of accumulation affects the result. When k is bigger, the diff is bigger.
+也许累加顺序会影响结果。当 k 越大时，误差也越大。
 
-# Experiments
+# 实验
 
-Then, follow this documentation:[https://docs.tenstorrent.com/tt-blacksmith/src/getting-started.html](https://docs.tenstorrent.com/tt-blacksmith/src/getting-started.html)
+接下来，按照这个文档操作：[https://docs.tenstorrent.com/tt-blacksmith/src/getting-started.html](https://docs.tenstorrent.com/tt-blacksmith/src/getting-started.html)
 
 ```plain
 git clone <https://github.com/tenstorrent/tt-blacksmith.git>
@@ -77,13 +77,13 @@ cd tt-blacksmith
 source env/activate --xla
 ```
 
-First, I want to try this experiment on a single chip of n300.
+首先，我想在 n300 的单芯片上尝试这个实验。
 
-## Llama 3.2 1B Lora failed(solved)
+## Llama 3.2 1B Lora 失败（已解决）
 
 ![](20260312-162028.png)
 
-getting access right: [https://huggingface.co/meta-llama/Llama-3.2-1B](https://huggingface.co/meta-llama/Llama-3.2-1B)
+获取访问权限：[https://huggingface.co/meta-llama/Llama-3.2-1B](https://huggingface.co/meta-llama/Llama-3.2-1B)
 
 ```plain
 pip install huggingface_hub
@@ -93,9 +93,9 @@ python3 blacksmith/experiments/torch/llama/xla/test_llama_fine_tuning_pure_torch
   --config blacksmith/experiments/torch/llama/xla/lora/single_chip/test_llama_3_2_1b_sst2.yaml
 ```
 
-You can create a W&B account.
+你可以创建一个 W&B 账号。
 
-When I first ran the experiment, it has errors.
+第一次运行实验时，出现了错误。
 
 ![](20260312-162127.png)
 
@@ -109,15 +109,15 @@ find / -name "libprotobuf.so*" 2>/dev/null
 
 ![](20260312-162301.png)
 
-it only has so.32 version.
+系统里只有 so.32 版本。
 
-I try to cheat.
+我试着"作弊"一下。
 
 ```plain
 sudo ln -s /usr/lib/x86_64-linux-gnu/libprotobuf.so.32 /usr/lib/x86_64-linux-gnu/libprotobuf.so.23
 ```
 
-and re-run, get the new error.
+重新运行，又出现了新的错误。
 
 > RuntimeError: Bad StatusOr access: INTERNAL: Failed to open /scratch/yuqi/tt-blacksmith/env/xla_env/lib/python3.12/site-packages/pjrt_plugin_tt/pjrt_plugin_tt.so: libnsl.so.2: cannot open shared object file: No such file or directory
 
@@ -125,15 +125,15 @@ and re-run, get the new error.
 sudo apt-get install libnsl2
 ```
 
-and re-run, get the new error.
+重新运行，又出现了新的错误。
 
 > ckernel_sfpu_trigonometry.h: In function 'calculate_cosine':ckernel_sfpu_trigonometry.h:321:1: error: unable to generate reloads for:...during RTL pass: reloadckernel_sfpu_trigonometry.h:321:1: internal compiler error: in curr_insn_transform, at lra-constraints.cc:4355gcc (tenstorrent/sfpi:7.31.0[315]) 15.1.0
 
-The bug is in the SFPI compiler (Tenstorrent's custom GCC fork for RISC-V Tensix cores). The GCC register allocator (LRA) fails to generate register reload code for the custom SFPI instruction `rvtt_sfploadi_int` inside the `calculate_cosine` function.
+这个 bug 出在 SFPI 编译器（Tenstorrent 为 RISC-V Tensix 核心定制的 GCC 分支）中。GCC 的寄存器分配器（LRA）无法为 `calculate_cosine` 函数中的自定义 SFPI 指令 `rvtt_sfploadi_int` 生成寄存器重载代码。
 
-I tried to search in the GitHub issue part of tenstorrent, but not the same issue.
+我在 Tenstorrent 的 GitHub issue 中搜索过，但没有找到相同的问题。
 
-But, the tt-blacksmith staff tested those experiments, the previous version of sfpi should be used. But if we directly change the SFPI version to a lower version, it may produce some conficts to other tt tools. So I try to lower the `pjrt-plugin-tt` version.
+不过，tt-blacksmith 的工作人员测试过这些实验，应该使用之前的 sfpi 版本。但如果直接把 SFPI 降版本，可能会和其他 tt 工具产生冲突。所以我尝试降低 `pjrt-plugin-tt` 的版本。
 
 ```plain
 cat /scratch/yuqi/tt-blacksmith/env/xla_requirements.txt
@@ -145,25 +145,25 @@ pjrt-plugin-tt==1.0.0.dev20260309001114
 torchvision==0.24.1+cpu
 ```
 
-Then, the output includes `extra-index-url <https://pypi.eng.aws.tenstorrent.com`>
+输出中包含 `extra-index-url <https://pypi.eng.aws.tenstorrent.com>`
 
-And the current version is `pjrt-plugin-tt==1.0.0.dev20260309001114`
+当前版本是 `pjrt-plugin-tt==1.0.0.dev20260309001114`
 
-Choosing the version of pjrt-plugin-tt satisfies the Python version and is a previous version.
+选择一个满足 Python 版本要求且是之前的 pjrt-plugin-tt 版本。
 
 ```plain
 pip install pjrt-plugin-tt==0.9.0.dev20260224001247 --extra-index-url <https://pypi.eng.aws.tenstorrent.com> --extra-index-url <https://download.pytorch.org/whl/cpu>
 ```
 
-Then, re-run the experiment.
+然后重新运行实验。
 
 ```plain
 python3 blacksmith/experiments/torch/llama/xla/test_llama_fine_tuning_pure_torch.py --config blacksmith/experiments/torch/llama/xla/lora/single_chip/test_llama_3_2_1b_sst2.yaml
 ```
 
-Training started successfully.
+训练成功启动了。
 
-other error:
+其他错误：
 
 Timeout waiting for Ethernet core service
 
@@ -173,7 +173,7 @@ pip install tt-smi
 tt-smi -r 0
 ```
 
-## MLP MNIST experiment
+## MLP MNIST 实验
 
 ![](20260312-162319.png)
 
@@ -191,4 +191,4 @@ python blacksmith/experiments/torch/mnist/tensor_parallel/test_mnist_training.py
 
 ![](20260312-162336.png)
 
-This is multichip-data parallel.
+这是多芯片数据并行的结果。
