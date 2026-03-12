@@ -59,7 +59,11 @@ bfloat16(wormhole) vs float32(cpu):0.210493
 
 When I change the datatype from bfloat16 to float32:
 
-max diff vs FP32:0.011194 k=4 max diff vs FP32:0.032349 k=64 max diff vs FP32:0.057039 k=128
+max diff vs FP32:0.011194 k=4 
+
+max diff vs FP32:0.032349 k=64 
+
+max diff vs FP32:0.057039 k=128
 
 Maybe the order of accumulation affects the result. When k is bigger, the diff is bigger.
 
